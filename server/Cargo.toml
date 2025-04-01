@@ -1,0 +1,13 @@
+[package]
+name = "rust_dns_adblocker"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+trust-dns-server = "0.22"
+chrono = "0.4"
+
+[dev-dependencies]
+assert_cmd = "2"  # For CLI testing

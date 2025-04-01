@@ -1,0 +1,22 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+
+# If you don't want to commit Cargo.lock (depends on your workflow)
+# Cargo.lock
+
+# Editor-specific or OS-specific
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+
+# Log files
+blocked_log.csv
+*.log
