@@ -1,34 +1,54 @@
 use std::fs;
+use std::path::Path;
+use eyre::{Result, eyre};
+
+use crate::error::AdBlockerError;
 
 const BLOCKLIST_FILE: &str = "blocked_domains.txt";
 
-pub fn load_blocklist() -> Vec<String> {
-    fs::read_to_string(BLOCKLIST_FILE)
-        .unwrap_or_default()
-        .lines()
-        .map(String::from)
-        .collect()
-
-}
-
-pub fn add_domain(domain: &str) {
-    let mut list = load_blocklist();
-    if !list.contains(&domain.to_string()) {
-        list.push(domain.to_string());
-        fs::write(BLOCKLIST_FILE, list.join("\n")).expect("Failed to write blocklist");
-        println!("Domain '{}' added tp blocklst", domain);
+pub fn load_blocklist() -> Result<Vec<String>> {
+    if !Path::new(BLOCKLIST_FILE).exists() {
+        return Ok(vec![]); //no file yet = empty blocklist
     }
+    
+    let contents = fs::read_to_string(BLOCKLIST_FILE)?; //read file
+    Ok(contents.lines().map(String::from).collect()) //split ijnto lines
+
 }
 
-pub fn remove_domain(domain: &str) {
-    let mut list = load_blocklist();
-    list.retain(|d| d != domain);
-    fs::write(BLOCKLIST_FILE, list.join("\n")).expect("Failed top write blocklist");
-    println!("DOmain '{}' removed from blocklist", domain);
+pub fn add_domain(domain: &str) -> Result<()> {
+    let mut list = load_blocklist()?; //get current blocklist
+
+    if list.contains(&domain.to_string()) {
+        //domain alreafy in blocklist
+        println!("Domain '{}' is already in blocklst", domain);
+        return Ok(());
+    }
+
+    list.push(domain.to_string());
+    fs::write(BLOCKLIST_FILE, list.join("\n"))?;
+    println!("Domain '{}' added to blocklst", domain);
+
+    Ok(())
 }
 
-pub fn list_blocked_domains() {
-    let list = load_blocklist();
+pub fn remove_domain(domain: &str) -> Result<()> {
+    let mut list = load_blocklist()?;
+    let initial_len = list.len();
+
+    list.retain(|d| d != domain); //remove the matching domain
+
+    if list.len() == initial_len {
+        println!("Domain '{}' was not in blocklist", domain);
+    } else {
+        fs::write(BLOCKLIST_FILE, list.join("\n"))?;
+        println!("DOmain '{}' removed from blocklist", domain);
+    }
+    Ok(())
+}
+
+pub fn list_blocked_domains() -> Result<()> {
+    let list = load_blocklist()?;
     if list.is_empty() {
         println!("No domains currently blocked");
     } else {
@@ -37,4 +57,6 @@ pub fn list_blocked_domains() {
             println!("-{}", domain);
         }
     }
+
+    Ok(())
 }
