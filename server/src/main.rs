@@ -6,7 +6,7 @@ mod error;
 
 use clap::Parser;
 use cli::{Cli, Commands};
-use color_eyre::eyre::{Result, eyre};
+use color_eyre::eyre::Result;
 
 fn main() -> Result<()> {
     let cli_args = Cli::parse();

@@ -1,8 +1,6 @@
 use std::fs;
 use std::path::Path;
-use eyre::{Result, eyre};
-
-use crate::error::AdBlockerError;
+use eyre::Result;
 
 const BLOCKLIST_FILE: &str = "blocked_domains.txt";
 

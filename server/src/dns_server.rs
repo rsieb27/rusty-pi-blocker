@@ -43,9 +43,68 @@ pub fn start_dns_server() -> Result<()> {
     }
 }
 
-fn generate_nxdomain_response(_request: &[u8]) -> Vec<u8> {
-    //return a minimalr dns packet indicating NXDOMAIN for conciseness return an empty vec; change later
-    vec![]
+fn generate_nxdomain_response(request: &[u8]) -> Vec<u8> {
+    //if request too small return empty
+    if request.len() < 12 {
+        return vec![];
+    }
+
+    let mut response = Vec::new();
+
+    //transaction id -- first 2 bytes from request
+    response.extend_from_slice(&request[0..2]);
+
+    //FLAGS:
+    //QR=1 -- response
+    //RD=1 -- recursion desired 
+    //RA=1 -- recursion available
+    //RCODE=3 -- nonexistent domain 
+    response.push(0x81);
+    response.push(0x83);
+
+    //copy QDCOUNT from original request; bytes 4-6
+    response.extend_from_slice(&request[4..6]);
+
+    //ANCOUNT = 0; no answer
+    response.push(0x00);
+    response.push(0x00);
+
+    //NSCOUNT  = 0; no answer
+    response.push(0x00);
+    response.push(0x00);
+
+    //ASCOUNT = 0; no answer
+    response.push(0x00);
+    response.push(0x00);
+
+    //copy the question section from the original request
+    let mut offset = 12;
+
+    //copy all QNAME bytes until it hits a 0
+    while offset < request.len() && request[offset] != 0 {
+        response.push(request[offset]);
+        offset += 1;
+    }
+
+    //copy the 0 terminator for that domain
+    if offset < request.len() {
+        response.push(0);
+        offset += 1;
+    } else {
+        //bail if the request is malformed
+        return vec![];
+    }
+
+    //copy the QTYPE + QCLASS 
+    if offset + 4 < request.len() {
+        response.extend_from_slice(&request[offset..offset+4]);
+        offset += 4;
+    } else {
+        return vec![];
+    }
+
+    response
+
 }
 
 fn forward_dns_request (
