@@ -1,1 +1,3 @@
 track.example.net
+ads.com
+test.com
