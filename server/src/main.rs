@@ -15,7 +15,7 @@ fn main() -> Result<()> {
         Commands::Start => dns_server::start_dns_server(), //run dns server
         Commands::Add { domain } => blocklist::add_domain(&domain), //add to blocklist
         Commands::Remove { domain } => blocklist::remove_domain(&domain), //remove from blocklist
-        Commands::List => blocklist::list_blocked_domains(), //print blocklist
+        Commands::List => blocklist::list_blocked_domains("blocked_domains.txt"), //print blocklist
     }?;
 
     Ok(())

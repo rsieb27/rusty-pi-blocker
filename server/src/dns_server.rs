@@ -43,7 +43,7 @@ pub fn start_dns_server() -> Result<()> {
     }
 }
 
-fn generate_nxdomain_response(request: &[u8]) -> Vec<u8> {
+pub fn generate_nxdomain_response(request: &[u8]) -> Vec<u8> {
     //if request too small return empty
     if request.len() < 12 {
         return vec![];
@@ -96,7 +96,7 @@ fn generate_nxdomain_response(request: &[u8]) -> Vec<u8> {
     }
 
     //copy the QTYPE + QCLASS 
-    if offset + 4 < request.len() {
+    if offset + 4 <= request.len() {
         response.extend_from_slice(&request[offset..offset+4]);
         offset += 4;
     } else {
