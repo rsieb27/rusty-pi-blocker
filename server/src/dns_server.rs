@@ -1,5 +1,7 @@
 use std::net::UdpSocket;
 use std::sync::{Arc, Mutex};
+use trust_dns_proto::op::Message;
+use trust_dns_proto::serialize::binary::BinEncodable;
 use eyre::{Result, eyre};
 
 use crate::blocklist;
@@ -23,7 +25,20 @@ pub fn start_dns_server() -> Result<()> {
             .recv_from(&mut buf)
             .map_err(|e| eyre!(AdBlockerError::UdpSocketError(e.to_string())))?;
 
-        let domain = "example.com".to_string(); //placeholder domain --- actaul parsing later
+        //parse dns message
+        let dns_message = match Message::from_vec(&buf[..amt]) {
+            Ok(msg) => msg, 
+            Err(_) => continue,
+        };
+
+        //get domain from the first query
+        let domain = match dns_message.queries().first() {
+            Some(query) => {
+                //normalize domain
+                query.name().to_utf8().to_lowercase().trim_end_matches('.').to_string()
+            }
+            None => continue, 
+        };
 
         let list = blocklist.lock().map_err(|_| eyre!("Blocklist lock is poisoned"))?;
 

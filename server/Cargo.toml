@@ -6,11 +6,12 @@ edition = "2021"
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
-trust-dns-server = "0.22"
+trust-dns-server = "0.23.2"
+trust-dns-proto = "0.23.1"
 chrono = "0.4"
 eyre = "0.6"
 color-eyre = "0.6"
-thiserror = "1.0"
+thiserror = "2.0.12"
 
 [dev-dependencies]
 assert_cmd = "2"  # For CLI testing
