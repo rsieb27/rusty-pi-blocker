@@ -13,6 +13,8 @@ pub struct Cli {
 pub enum Commands {
     //start dns server
     Start,
+    //Stop dns server
+    Stop,
     //add domain to the blocklist
     Add { domain: String },
     //remove a domain from the blocklist

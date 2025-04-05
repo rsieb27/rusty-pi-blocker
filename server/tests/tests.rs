@@ -80,11 +80,11 @@ mod tests {
 
 
     fn setup_blocklist_file(contents: &str) {
-        fs::write("test_blocked_domains.txt", contents).expect("Failed to write blocklist file");
+        fs::write("blocked_domains.txt", contents).expect("Failed to write blocklist file");
     }
 
     fn cleanup_blocklist_file() {
-        let _ = fs::remove_file("test_blocked_domains.txt");
+        let _ = fs::remove_file("blocked_domains.txt");
     }
 
     #[test]
@@ -136,7 +136,7 @@ mod tests {
 
     #[test]
     fn test_log_blocked_domain() {
-        let log_file = "test_blocked_log.csv";
+        let log_file = "blocked_log.csv";
         // Remove any existing log file.
         let _ = fs::remove_file(log_file);
 

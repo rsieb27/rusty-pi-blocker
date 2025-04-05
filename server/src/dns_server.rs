@@ -1,4 +1,6 @@
 use std::net::UdpSocket;
+use std::process;
+use std::fs;
 use std::sync::{Arc, Mutex};
 use trust_dns_proto::op::Message;
 use trust_dns_proto::serialize::binary::BinEncodable;
@@ -9,9 +11,14 @@ use crate::logger;
 use crate::error::AdBlockerError;
 
 pub fn start_dns_server() -> Result<()> {
+    //bind to the udp socket to port 53
     let socket = UdpSocket::bind("0.0.0.0:53")
-        .map_err(|e| eyre!(AdBlockerError::UdpSocketError(e.to_string())))?; //listen on dns port
-    println!("DNS sever running on port 53...");
+        .map_err(|e| eyre!(AdBlockerError::UdpSocketError(e.to_string())))?;
+
+    //write the Process id to a file
+    let pid = process::id();
+    fs::write("dns.pid", pid.to_string())?;
+    println!("DNS server running on port 53 (pid: {})", pid);
 
     //unwrap the blocklist to Vec<String>
     let blocklist_data = blocklist::load_blocklist()?;
