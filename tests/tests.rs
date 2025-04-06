@@ -2,7 +2,7 @@
 mod tests {
     use hamcrest2::prelude::*;
     use rust_dns_adblocker::blocklist::{add_domain, load_blocklist, remove_domain};
-    use rust_dns_adblocker::dns_server::generate_nxdomain_response;
+    use rust_dns_adblocker::dns_server::DnsAdBlocker;
     use rust_dns_adblocker::logger::log_blocked_domain;
     use std::fs;
 
@@ -35,7 +35,7 @@ mod tests {
         // QCLASS: IN (0x0001)
         request.extend_from_slice(&[0x00, 0x01]);
 
-        let response = generate_nxdomain_response(&request);
+        let response = DnsAdBlocker::generate_nxdomain_response(&request);
 
         // Build the expected response manually:
         let mut expected = Vec::new();
@@ -73,7 +73,7 @@ mod tests {
     #[test]
     fn test_generate_nxdomain_response_too_short() {
         let request = vec![0, 1, 2]; // shorter than 12 bytes
-        let response = generate_nxdomain_response(&request);
+        let response = DnsAdBlocker::generate_nxdomain_response(&request);
 
         assert_that!(response.len(), equal_to(0));
     }

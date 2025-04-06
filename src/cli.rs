@@ -21,4 +21,6 @@ pub enum Commands {
     Remove { domain: String },
     //list all the blocked domains
     List,
+    //analyze blocked domains
+    Analyze,
 }
