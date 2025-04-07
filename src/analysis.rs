@@ -28,8 +28,8 @@ impl LogAnalyzer {
                 .getattr("analyze")?
                 .call1((lines,))?;
             
-            let top_domains: Vec<(String, usize)> = result.get_item("top_domains")?.extract()?;
-            let top_ips: Vec<(String, usize)> = result.get_item("top_ips")?.extract()?;
+            let top_domains: Vec<(String, usize)> = result.get_item("top domains")?.extract()?;
+            let top_ips: Vec<(String, usize)> = result.get_item("top ips")?.extract()?;
 
             println!("Top Blocked Domains:");
             for (domain, count) in top_domains {

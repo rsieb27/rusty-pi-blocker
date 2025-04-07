@@ -1,6 +1,6 @@
 from collections import Counter
 
-def analysis(log_lines):
+def analyze(log_lines):
     domains = []
     ips = []
     for line in log_lines:

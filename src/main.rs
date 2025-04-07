@@ -1,3 +1,7 @@
+#[cfg(windows)]
+#[link(name = "python313")]
+extern "C" {}
+
 mod cli;
 mod dns_server;
 mod blocklist;
