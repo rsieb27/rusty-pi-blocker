@@ -1,4 +1,5 @@
 use std::fs;
+use libc::{kill, SIGTERM};
 use color_eyre::eyre::Result;
 
 #[cfg(target_family = "unix")]
@@ -10,13 +11,13 @@ pub fn stop_dns_server() -> Result<()> {
         .trim().parse().map_err(|_| color_eyre::eyre::eyre!("Invalid PID found in dns.pid"))?;
 
     //send SIGTERM to the process libc
-    let result = unsafe { libc::kill(pid, libc::SIGTERM ) };
+    let result = unsafe { kill(pid, SIGTERM ) };
     if result == 0 {
         println!("Sent SIGTERM to process {}", pid);
         fs::remove_file("dns.pid")?;
         Ok(())
     } else {
-        Err(eyre::eyre!("Failed to send SIGTERM to process {}"), pid)
+        Err(color_eyre::eyre::eyre!("Failed to send SIGTERM to process {}", pid))
     }
 }
 

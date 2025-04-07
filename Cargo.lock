@@ -1087,6 +1087,7 @@ dependencies = [
  "color-eyre",
  "eyre",
  "hamcrest2",
+ "libc",
  "pyo3",
  "thiserror 2.0.12",
  "tokio",
