@@ -36,7 +36,7 @@ impl LogAnalyzer {
                 println!("{}: {} times", domain, count);
             }
 
-            println!("\nTop Blocked Domains:");
+            println!("\nTop Blocked IPs:");
             for (ip, count) in top_ips {
                 println!("{}: {} times", ip, count);
             }

@@ -1,6 +1,8 @@
 use std::fs;
-use libc::{kill, SIGTERM};
 use color_eyre::eyre::Result;
+
+#[cfg(target_family = "unix")]
+use libc::{kill, SIGTERM};
 
 #[cfg(target_family = "unix")]
 pub fn stop_dns_server() -> Result<()> {
