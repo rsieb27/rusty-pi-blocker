@@ -5,6 +5,7 @@ mod tests {
     use rust_dns_adblocker::dns_server::DnsAdBlocker;
     use rust_dns_adblocker::logger::log_blocked_domain;
     use std::fs;
+    use serial_test::serial;
 
     #[test]
     fn test_generate_nxdomain_response_valid() {
@@ -88,6 +89,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn test_load_blocklist_empty() {
         cleanup_blocklist_file();
 
@@ -98,6 +100,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn test_load_blocklist_with_data() {
         cleanup_blocklist_file();
 
@@ -114,6 +117,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn test_add_and_remove_domain() {
         cleanup_blocklist_file();
 
@@ -135,6 +139,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn test_log_blocked_domain() {
         let log_file = "blocked_log.csv";
         // Remove any existing log file.
