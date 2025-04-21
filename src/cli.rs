@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "RUST DNS AD BLOCKER <3")]
+#[command(name = "RUST DNS AD BLOCKER")]
 #[command(about = "My attempt at an ad blocker written in mostly Rust")]
 
 pub struct Cli {
